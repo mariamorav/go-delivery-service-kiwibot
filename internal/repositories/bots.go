@@ -15,6 +15,7 @@ type BotRepository interface {
 	FindByFilter(filterField, filterValue string, offset, limit int) ([]models.Bot, int, error)
 	FindBotsAvailablesInZone(zoneId string) ([]*models.Bot, error)
 	UpdateBotState(botId, newStatus string) (*models.Bot, error)
+	DeleteDoc(id string) error
 }
 
 type botRepo struct{}
@@ -171,5 +172,25 @@ func (*botRepo) UpdateBotState(botId, newStatus string) (*models.Bot, error) {
 	}
 
 	return result, nil
+
+}
+
+func (*botRepo) DeleteDoc(id string) error {
+
+	ctx := context.Background()
+	client, err := database.GetFirebaseClient()
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return err
+	}
+	defer client.Close()
+
+	_, err = client.Collection(botsCollectionName).Doc(id).Delete(ctx)
+	if err != nil {
+		fmt.Printf("Error deleting doc: %v", err)
+		return err
+	}
+
+	return nil
 
 }

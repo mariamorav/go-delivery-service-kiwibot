@@ -17,10 +17,6 @@ var (
 	botsRepo repositories.BotRepository = repositories.NewBotRepository()
 )
 
-type BodyAssignBot struct {
-	OrderId string `json:"order_id"`
-}
-
 func CreateBot(c *gin.Context) {
 
 	var bot models.Bot
@@ -53,7 +49,7 @@ func CreateBot(c *gin.Context) {
 
 func GetBotsByZone(c *gin.Context) {
 
-	var queryParams QueryParams
+	var queryParams models.QueryParams
 
 	if c.ShouldBind(&queryParams) == nil {
 		log.Println(queryParams.Offset)
@@ -102,7 +98,7 @@ func GetBotsByZone(c *gin.Context) {
 
 func AssignBotToOrder(c *gin.Context) {
 
-	var req BodyAssignBot
+	var req models.BodyAssignBot
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -118,7 +114,7 @@ func AssignBotToOrder(c *gin.Context) {
 
 	// Assign available and nearest bot to the order
 	// Get Order by Id
-	deliveryOrder, err := repo.FindDocumentById(req.OrderId)
+	deliveryOrder, err := deliveriesRepo.FindDocumentById(req.OrderId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -134,7 +130,7 @@ func AssignBotToOrder(c *gin.Context) {
 	}
 	// update bot state and order state
 	updatedBot, err := botsRepo.UpdateBotState(nearestBot.Id, "reserved")
-	updatedOrder, err := repo.UpdateDeliveryState(deliveryOrder.Id, "assigned")
+	updatedOrder, err := deliveriesRepo.UpdateDeliveryState(deliveryOrder.Id, "assigned")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)

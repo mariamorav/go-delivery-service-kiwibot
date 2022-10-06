@@ -17,6 +17,7 @@ type DeliveryRepository interface {
 	FindDocumentById(id string) (*models.Delivery, error)
 	FindPendingOrders() ([]models.Delivery, error)
 	UpdateDeliveryState(deliveryId, newState string) (*models.Delivery, error)
+	DeleteDoc(id string) error
 }
 
 type deliveryRepo struct{}
@@ -236,5 +237,25 @@ func (*deliveryRepo) UpdateDeliveryState(deliveryId, newState string) (*models.D
 	}
 
 	return result, nil
+
+}
+
+func (*deliveryRepo) DeleteDoc(id string) error {
+
+	ctx := context.Background()
+	client, err := database.GetFirebaseClient()
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return err
+	}
+	defer client.Close()
+
+	_, err = client.Collection(collectionName).Doc(id).Delete(ctx)
+	if err != nil {
+		fmt.Printf("Error deleting doc: %v", err)
+		return err
+	}
+
+	return nil
 
 }

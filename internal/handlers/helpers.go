@@ -7,12 +7,6 @@ import (
 	"github.com/umahmood/haversine"
 )
 
-type QueryParams struct {
-	Offset uint32 `form:"offset"`
-	Limit  uint32 `form:"limit"`
-	Order  string `form:"order"`
-}
-
 func GetNearestBotAvailable(delivery *models.Delivery) (*models.Bot, error) {
 
 	bots, err := botsRepo.FindBotsAvailablesInZone(delivery.ZoneId)
@@ -52,7 +46,7 @@ func GetNearestBotAvailable(delivery *models.Delivery) (*models.Bot, error) {
 func AssignBotsToAllPendingOrders() ([]*models.Delivery, error) {
 
 	// Get pending orders
-	pendingOrders, err := repo.FindPendingOrders()
+	pendingOrders, err := deliveriesRepo.FindPendingOrders()
 	if err != nil {
 		errMsg := fmt.Errorf("there are no pending orders: %v", err)
 		return nil, errMsg
@@ -71,7 +65,7 @@ func AssignBotsToAllPendingOrders() ([]*models.Delivery, error) {
 		if err != nil {
 			return nil, err
 		}
-		_, err = repo.UpdateDeliveryState(order.Id, "assigned")
+		_, err = deliveriesRepo.UpdateDeliveryState(order.Id, "assigned")
 		if err != nil {
 			return nil, err
 		}

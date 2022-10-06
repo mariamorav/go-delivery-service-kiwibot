@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	repo repositories.DeliveryRepository = repositories.NewDeliveryRepository()
+	deliveriesRepo repositories.DeliveryRepository = repositories.NewDeliveryRepository()
 )
 
 func CreateDelivery(c *gin.Context) {
@@ -34,7 +34,7 @@ func CreateDelivery(c *gin.Context) {
 		return
 	}
 
-	result, err := repo.Save(&delivery)
+	result, err := deliveriesRepo.Save(&delivery)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -51,7 +51,7 @@ func CreateDelivery(c *gin.Context) {
 func GetDeliveryById(c *gin.Context) {
 	deliveryId := c.Params.ByName("id")
 
-	result, err := repo.FindDocumentById(deliveryId)
+	result, err := deliveriesRepo.FindDocumentById(deliveryId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -72,7 +72,7 @@ func GetDeliveryById(c *gin.Context) {
 
 func GetDeliveries(c *gin.Context) {
 
-	var queryParams QueryParams
+	var queryParams models.QueryParams
 
 	if c.ShouldBind(&queryParams) == nil {
 		log.Println(queryParams.Offset)
@@ -80,7 +80,7 @@ func GetDeliveries(c *gin.Context) {
 		log.Println(queryParams.Order)
 	}
 
-	deliveries, total, err := repo.FindAll(int(queryParams.Offset), int(queryParams.Limit), queryParams.Order)
+	deliveries, total, err := deliveriesRepo.FindAll(int(queryParams.Offset), int(queryParams.Limit), queryParams.Order)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)

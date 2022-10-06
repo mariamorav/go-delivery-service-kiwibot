@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "382941be-7505-4f82-b285-467c2a53f6c1",
+		"name": "kiwibot - delivery service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11842810"
+	},
+	"item": [
+		{
+			"name": "Deliveries",
+			"item": [
+				{
+					"name": "Create Delivery",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"pickup\": {\n\t\t\"pickup_lat\": 6.16139,\n\t\t\"pickup_lon\": -75.60553\n\t},\n\t\"dropoff\": {\n\t\t\"dropoff_lat\": 6.17168,\n\t\t\"dropoff_lon\": -75.60159\n\t},\n\t\"zone_id\": \"us-north\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/deliveries/new",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"deliveries",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Delivery by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/deliveries/QgDz4iJONRfbHGSvqmSl",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"deliveries",
+								"QgDz4iJONRfbHGSvqmSl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Deliveries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/deliveries/?offset=0&limit=10&order=desc",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"deliveries",
+								""
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign all pending orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/deliveries/assing-pending-orders",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"deliveries",
+								"assing-pending-orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bots",
+			"item": [
+				{
+					"name": "Create Bot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"location\": {\n\t\t\"lat\": 6.161398,\n\t\t\"lon\": -75.605353\n\t},\n\t\"zone_id\": \"us-north\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/bots/new",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bots",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bots by Zone",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/bots/us-north?offset=0&limit=3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bots",
+								"us-north"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assing Bot to an Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"order_id\": \"QgDz4iJONRfbHGSvqmSl\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/bots/assign-order",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bots",
+								"assign-order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

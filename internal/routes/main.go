@@ -27,3 +27,8 @@ func getRoutes() {
 	addDeliveriesRoutes(v1)
 	addBotsRoutes(v1)
 }
+
+func SetupRouter() *gin.Engine {
+	getRoutes()
+	return router
+}
