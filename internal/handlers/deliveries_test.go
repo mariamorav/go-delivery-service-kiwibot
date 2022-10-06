@@ -167,7 +167,7 @@ func TestGetDeliveries(t *testing.T) {
 	}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v1/deliveries/?offset=0&limit=3&order=desc", nil)
+	req, _ := http.NewRequest("GET", "/api/v1/deliveries?offset=0&limit=3&order=desc", nil)
 	router.ServeHTTP(w, req)
 
 	var response *responseBody

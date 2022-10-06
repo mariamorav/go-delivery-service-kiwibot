@@ -1,0 +1,371 @@
+definitions:
+  AssignBotToOrderResponse:
+    properties:
+      bot:
+        $ref: '#/definitions/models.Bot'
+      message:
+        type: string
+      order:
+        $ref: '#/definitions/models.Delivery'
+    type: object
+  AssignBotsToAllPendingOrdersResponse:
+    properties:
+      message:
+        type: string
+      orders_unassigned:
+        items:
+          $ref: '#/definitions/models.Delivery'
+        type: array
+    type: object
+  BodyAssignBot:
+    properties:
+      order_id:
+        description: |-
+          The order id of delivery pending to assign
+          example: "QgDz4iJONRfbHGSvqmSl"
+          required: true
+        type: string
+    required:
+    - order_id
+    type: object
+  CreateBotRequest:
+    properties:
+      location:
+        $ref: '#/definitions/models.Location'
+        description: Location coordinates of the bot
+      zone_id:
+        description: ZoneId of the zone where the bot is located
+        type: string
+    type: object
+  CreateBotResponse:
+    properties:
+      bot:
+        $ref: '#/definitions/models.Bot'
+      message:
+        type: string
+    type: object
+  CreateDeliveryRequest:
+    properties:
+      dropoff:
+        $ref: '#/definitions/models.Dropoff'
+      pickup:
+        $ref: '#/definitions/models.Pickup'
+      zone_id:
+        type: string
+    required:
+    - zone_id
+    type: object
+  CreateDeliveryResponse:
+    properties:
+      delivery:
+        $ref: '#/definitions/models.Delivery'
+      message:
+        type: string
+    type: object
+  ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  GetBotsByZoneResponse:
+    properties:
+      next_url:
+        type: string
+      previous_url:
+        type: string
+      results:
+        items:
+          $ref: '#/definitions/models.Bot'
+        type: array
+      total:
+        type: integer
+    type: object
+  GetDeliveriesResponse:
+    properties:
+      next_url:
+        type: string
+      previous_url:
+        type: string
+      results:
+        items:
+          $ref: '#/definitions/models.Delivery'
+        type: array
+      total:
+        type: integer
+    type: object
+  MessageNotFound:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Bot:
+    properties:
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/models.Location'
+      status:
+        type: string
+      zone_id:
+        type: string
+    required:
+    - location
+    - zone_id
+    type: object
+  models.Delivery:
+    properties:
+      creation_date:
+        type: string
+      dropoff:
+        $ref: '#/definitions/models.Dropoff'
+      id:
+        type: string
+      pickup:
+        $ref: '#/definitions/models.Pickup'
+      state:
+        type: string
+      zone_id:
+        type: string
+    required:
+    - dropoff
+    - pickup
+    - zone_id
+    type: object
+  models.Dropoff:
+    properties:
+      dropoff_lat:
+        type: number
+      dropoff_lon:
+        type: number
+    required:
+    - dropoff_lat
+    - dropoff_lon
+    type: object
+  models.Location:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+    required:
+    - lat
+    - lon
+    type: object
+  models.Pickup:
+    properties:
+      pickup_lat:
+        type: number
+      pickup_lon:
+        type: number
+    required:
+    - pickup_lat
+    - pickup_lon
+    type: object
+info:
+  contact: {}
+paths:
+  /bots/{zone_id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows you to list the bots located in the zone_id
+        submitted.
+      parameters:
+      - description: Id of the zone where you want to find bots
+        in: path
+        name: zone_id
+        required: true
+        type: string
+      - description: Start point of documents search
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - description: Limit number of results returned by search
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetBotsByZoneResponse'
+        "404":
+          description: there are no results for your search
+          schema:
+            $ref: '#/definitions/MessageNotFound'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: get bots by a zone_id
+      tags:
+      - bots
+  /bots/assign-order:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows you assign an available bot to an a pending
+        order.
+      parameters:
+      - description: The body request to assign a bot
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/BodyAssignBot'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AssignBotToOrderResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: assign a bot to an order
+      tags:
+      - bots
+  /bots/new:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows you to create a new bot with available status
+        as default.
+      parameters:
+      - description: The body request to create a Bot
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBotRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateBotResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: create a new bot
+      tags:
+      - bots
+  /deliveries:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows you to list deliveries paginated.
+      parameters:
+      - description: Start point of documents search
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - description: Limit number of results returned by search
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'options: ''asc'' or ''desc'' to order the documents by creation_date.
+          Default is ''asc'''
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetDeliveriesResponse'
+        "404":
+          description: there are no results for your search
+          schema:
+            $ref: '#/definitions/MessageNotFound'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: get deliveries paginated
+      tags:
+      - deliveries
+  /deliveries/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows you to get a delivery by the id.
+      parameters:
+      - description: Id of the delivery
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetBotsByZoneResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: get delivery by id
+      tags:
+      - deliveries
+  /deliveries/assing-pending-orders:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint allows you to assign available bots to pending orders.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AssignBotsToAllPendingOrdersResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: assign bots to all pending orders
+      tags:
+      - deliveries
+  /deliveries/new:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows you to create a new delivery with pending
+        state as default.
+      parameters:
+      - description: The body request to create a delivery
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDeliveryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateDeliveryResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: create a new delivery
+      tags:
+      - deliveries
+swagger: "2.0"

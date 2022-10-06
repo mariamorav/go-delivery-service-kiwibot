@@ -66,7 +66,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/deliveries/?offset=0&limit=10&order=desc",
+							"raw": "localhost:8080/api/v1/deliveries?offset=0&limit=10&order=desc",
 							"host": [
 								"localhost"
 							],
@@ -74,8 +74,7 @@
 							"path": [
 								"api",
 								"v1",
-								"deliveries",
-								""
+								"deliveries"
 							],
 							"query": [
 								{

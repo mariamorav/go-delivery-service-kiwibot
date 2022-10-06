@@ -17,6 +17,17 @@ var (
 	deliveriesRepo repositories.DeliveryRepository = repositories.NewDeliveryRepository()
 )
 
+// CreateDelivery godoc
+// @Summary create a new delivery
+// @Schemes
+// @Description This endpoint allows you to create a new delivery with pending state as default.
+// @Tags deliveries
+// @Accept json
+// @Produce json
+// @Param Body body models.CreateDeliveryRequest true "The body request to create a delivery"
+// @Success 200 {object} models.CreateDeliveryResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /deliveries/new [post]
 func CreateDelivery(c *gin.Context) {
 
 	var delivery models.Delivery
@@ -48,6 +59,17 @@ func CreateDelivery(c *gin.Context) {
 
 }
 
+// GetDeliveryById godoc
+// @Summary get delivery by id
+// @Schemes
+// @Description This endpoint allows you to get a delivery by the id.
+// @Tags deliveries
+// @Accept json
+// @Produce json
+// @Param id path string true "Id of the delivery"
+// @Success 200 {object} models.GetBotsByZoneResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /deliveries/{id} [get]
 func GetDeliveryById(c *gin.Context) {
 	deliveryId := c.Params.ByName("id")
 
@@ -70,6 +92,20 @@ func GetDeliveryById(c *gin.Context) {
 
 }
 
+// GetDeliveries godoc
+// @Summary get deliveries paginated
+// @Schemes
+// @Description This endpoint allows you to list deliveries paginated.
+// @Tags deliveries
+// @Accept json
+// @Produce json
+// @Param offset query int true "Start point of documents search"
+// @Param limit query int true	"Limit number of results returned by search"
+// @Param order query string false	"options: 'asc' or 'desc' to order the documents by creation_date. Default is 'asc'"
+// @Success 200 {object} models.GetDeliveriesResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Failure 404 {object} models.MessageNotFound "there are no results for your search"
+// @Router /deliveries [get]
 func GetDeliveries(c *gin.Context) {
 
 	var queryParams models.QueryParams
@@ -118,6 +154,16 @@ func GetDeliveries(c *gin.Context) {
 
 }
 
+// AssignBotsToPendingOrders godoc
+// @Summary assign bots to all pending orders
+// @Schemes
+// @Description This endpoint allows you to assign available bots to pending orders.
+// @Tags deliveries
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.AssignBotsToAllPendingOrdersResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /deliveries/assing-pending-orders [get]
 func AssignBotsToPendingOrders(c *gin.Context) {
 
 	ordersUnassigned, err := AssignBotsToAllPendingOrders()

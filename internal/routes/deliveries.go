@@ -11,7 +11,7 @@ func addDeliveriesRoutes(rg *gin.RouterGroup) {
 
 	deliveries.POST("/new", handlers.CreateDelivery)
 	deliveries.GET("/:id", handlers.GetDeliveryById)
-	deliveries.GET("/", handlers.GetDeliveries)
+	deliveries.GET("", handlers.GetDeliveries)
 	deliveries.GET("/assing-pending-orders", handlers.AssignBotsToPendingOrders)
 
 }
