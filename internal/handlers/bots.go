@@ -121,7 +121,7 @@ func GetBotsByZone(c *gin.Context) {
 
 }
 
-// GetBotsByZone godoc
+// AssignBotToOrder godoc
 // @Summary assign a bot to an order
 // @Schemes
 // @Description This endpoint allows you assign an available bot to an a pending order.
