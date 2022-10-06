@@ -27,6 +27,8 @@ The swagger docs could be find in http://localhost:8080/docs/index.html (if need
 
 To see the coverage of the tests made, you can run go tool `go tool cover -html=cover.out`
 
+In the [docs](./docs) folder you could found a postman collection that you can import in Postman Desktop or Web to test the endpoints created.
+
 ### Author
 
 - Maria Mora <mariamora2807@gmail.com>
